@@ -1,23 +1,19 @@
 .container{
-  background-color: black;
-  min-height: 100vh;
+  background-color: transparent;
   display: flex;
   justify-content: center;
 }
 
 .card-text{
-  color: yellow;
+  color: #FFFF00;
 }
 
 .card-title{
-  color: yellow;
-  border-color: yellow;
+  color: #FFFF00;
 }
 
 .card{
-  background-color: black;
-  border-color: darkgrey;
-
+  background-color: transparent;
 }
 
 .Card{

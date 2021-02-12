@@ -39,5 +39,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "axios": "^0.21.1",
+    "bootstrap": "^4.6.0",
+    "react-bootstrap": "^1.4.3"
   }
 }
