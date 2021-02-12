@@ -1,0 +1,25 @@
+.container{
+  background-color: black;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.card-text{
+  color: yellow;
+}
+
+.card-title{
+  color: yellow;
+  border-color: yellow;
+}
+
+.card{
+  background-color: black;
+  border-color: darkgrey;
+
+}
+
+.Card{
+  justify-content: center;
+}

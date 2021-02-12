@@ -1,0 +1,17 @@
+html {
+  background-image: url('./background.png');
+  background-color: #000;
+}
+
+.App {
+  text-align: center;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  background-image: url('./background.png');
+}
+
+.App-logo{
+  height:25%;
+  width:25%;
+}
