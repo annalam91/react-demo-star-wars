@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Card, Button, ListGroup } from "react-bootstrap";
-import axios from "axios"
-import "./StarWarsCharacters.css"
+import React, { useEffect, useState } from 'react';
+import { Card, Button, ListGroup } from 'react-bootstrap';
+import axios from 'axios';
+import './StarWarsCharacters.css';
 
 interface IEncounter {
     name: string,
     gender: string,
-    height: number,
+    height: number, // It's in cm
     health: number,
     strength: number,
     defence: number,
@@ -19,84 +19,82 @@ interface IStarWarsCharacter {
     height: string
 }
 
-export const StarWarsEncounter: React.FC<any> = (props) => {
+export const StarWarsEncounter: React.FC<any> = (props: any) => {
 
-    // Define the state of our encounter...
+    // Define an array of characters
+    const [characters, setCharacters] = useState<IStarWarsCharacter[]>([]);
+    // Define our state
     const [encounter, setEncounter] = useState<IEncounter>();
-    
-    // Fetch request to retrieve all people from the api
+
+    // Fetch request to grab all characters from the people endpoint
     const getStarWarsPeople = async (): Promise<IStarWarsCharacter[]> => {
         try{
-            // AXIOS, I CHOOSE YOU!
             let starWarsPeopleFetch: any = await axios.get("https://swapi.dev/api/people");
-            // But wait... You only got me the first 10 entries?!
-            // .. create an array to push these into
-            let starWarsPeople: IStarWarsCharacter[] = [];
-            // push each entry out of data and into our array.
-            starWarsPeopleFetch?.data.results.map((person: IStarWarsCharacter) => {
-                starWarsPeople.push(person);
+            // console.log(starWarsPeopleFetch);
+            let starWarsPeople:IStarWarsCharacter[] = [];
+
+            starWarsPeopleFetch?.data.results?.map((person: IStarWarsCharacter) => {
+                    starWarsPeople.push(person)
             });
-            // next, within data, is the url of our next page of entries, while this exists, repeatedly
-            // .. fetch and push into our array.
-            while(starWarsPeopleFetch.data.next)
-            {
-                // Try again Axios, i believe in you.
-                starWarsPeopleFetch = await axios.get(starWarsPeopleFetch.data.next);
-                starWarsPeopleFetch.data.results?.map((person: IStarWarsCharacter) => {
-                    starWarsPeople.push(person);
+
+            while(starWarsPeopleFetch?.data.next){
+                starWarsPeopleFetch = await axios.get(starWarsPeopleFetch?.data.next);
+                starWarsPeopleFetch?.data.results?.map((person: IStarWarsCharacter) => {
+                    starWarsPeople.push(person)
                 });
             }
-            // WE DID IT! Ship it.
             return starWarsPeople;
-        } catch (e) {
-            // If the Star Wars API is down.
-            console.log("API issue, probably AFK or something", e);
+        }
+        catch(e){
+            console.log(e);
             return []
         }
     }
 
     const generateRandomEncounter = async () => {
-        // Acquire our Star Wars Characters:
-        const starWarsPeopleArray: IStarWarsCharacter[] = await getStarWarsPeople();
-        // console.log("Peeps", starWarsPeopleArray); // About 80 something...
+        // If our characters state length is less than one, fetch a new set.
+        // .. Otherwise, use the state for this.
+        let starWarsPeopleArray: IStarWarsCharacter[] = [];
+        if(characters.length < 1){
+            // Fetch the characters
+            starWarsPeopleArray = await getStarWarsPeople();
+            setCharacters(starWarsPeopleArray);
+        }
+        else {
+            starWarsPeopleArray = characters;
+        }
+
         if(starWarsPeopleArray.length < 1) return;
-        // Randomly generate a number from zero to length of the array:
+
         let randomNumber = Math.floor(
-            Math.random() * 
-            Math.floor(starWarsPeopleArray.length)
-            );
-        
-        // Select that character from the array:
-        const encounterCharacter = starWarsPeopleArray[randomNumber];
+            Math.random() *
+            starWarsPeopleArray.length
+        )
+
+        const encounterCharacter = starWarsPeopleArray[randomNumber]
+
         setEncounter({
             name: encounterCharacter.name,
             gender: encounterCharacter.gender,
             height: Number(encounterCharacter.height),
-            health: 10,
+            health: 2,
             strength: 5,
-            defence: 5,
-            experienceWorth: 1
+            defence: 4,
+            experienceWorth: 1000
         })
     }
 
-    // When the component mounts, generate a random encounter
     useEffect(() => {
         generateRandomEncounter();
     }, [])
 
-    // Log when the encouter changes. The ultimate debugging technique!
-    // .. We never console.log() directly after state is set as we'll encounter a race condition.
-    useEffect(() => {
-        console.log(encounter)
-    }, [encounter]);
 
-    return(
+    return (
         <div className="container">
         <div className="card">
           <Card 
           bg="primary"
           style={{ width: "18rem" }}>
-            {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
             <Card.Body>
               <Card.Title>{encounter?.name.toUpperCase()}</Card.Title>
               <Card.Subtitle className="mb-2">An enemy appears...</Card.Subtitle>
@@ -116,4 +114,5 @@ export const StarWarsEncounter: React.FC<any> = (props) => {
         </div>
       </div>
     )
+
 }

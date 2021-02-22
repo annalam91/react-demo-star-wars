@@ -10,7 +10,6 @@ import { StarWarsEncounter } from './components/StarWarsEncounter';
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
         </header>
-        {/* <StarWarsCharacters /> */}
         <StarWarsEncounter />
       </div>
     );

@@ -11,7 +11,7 @@ export default function StarWarsCharacters(){
         try{
             const starWars: any = await axios.get("https://swapi.dev/api/people/1");
             setName(starWars.data.name);
-            // console.log(starWars);
+            console.log(starWars);
         } catch (e) {
             console.log(e);
         }
